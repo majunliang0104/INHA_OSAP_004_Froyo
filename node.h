@@ -32,7 +32,7 @@ private:
     // 해당 node의 key값
     int num_;
 
-    // 해당 node의 child 중 height_의 최댓값 + 1 (left node일 경우 0)
+    // 해당 node의 child 중 height_의 최댓값 + 1 (leaf node일 경우 0)
     int height_;
 
     // 부모 노드
