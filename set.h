@@ -7,7 +7,7 @@
 class Set
 {
 public:
-    virtual ~Set() = 0;
+    virtual ~Set() {}
 
     // Basic 기능
     // key를 root로 하는 subtree에서 최솟값을 갖는 node의 값과 depth를 출력
