@@ -6,7 +6,7 @@
 
 int main()
 {
-    SetAVL* set = new SetAVL();
+    SetAVL set;
     
     return 0;
 }

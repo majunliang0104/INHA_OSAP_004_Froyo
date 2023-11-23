@@ -23,7 +23,7 @@ int SetAVL::Find(const int key)
 }
 
 // num을 삽입하고 해당 node의 depth를 출력
-void Insert(const int num)
+void SetAVL::Insert(const int num)
 {
     
 }
