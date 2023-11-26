@@ -7,11 +7,8 @@
 class Node
 {
 public:
-    virtual ~Node() = 0;
+    virtual ~Node() {}
     virtual int GetNum() const = 0;
 };
-
-// Node 클래스의 소멸자 정의
-Node::~Node() {}
 
 #endif

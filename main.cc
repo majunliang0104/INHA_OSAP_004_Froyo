@@ -1,9 +1,12 @@
 // 라이선스
 
+#include "set_avl.h"
+
 #include <iostream>
 
 int main()
 {
-    std::cout << "Hello, World\n";
+    SetAVL set;
+    
     return 0;
 }
