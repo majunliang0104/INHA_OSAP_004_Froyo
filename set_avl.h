@@ -74,6 +74,12 @@ private:
         NodeAVL* current_node,
         NodeAVL* parent_node,
         NodeAVL* grand_parent_node);
+
+    // Right Right Case에 대하여 restructuring 진행
+    void RestructuringForRightRightCase(
+        NodeAVL* current_node,
+        NodeAVL* parent_node,
+        NodeAVL* grand_parent_node);
 };
 
 #endif
