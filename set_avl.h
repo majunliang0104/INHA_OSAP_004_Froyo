@@ -52,6 +52,9 @@ private:
 
     // start_node부터 root node까지 모든 node의 height 갱신
     void UpdateHeightUntilRoot(NodeAVL* start_node);
+
+    // 해당 node의 (left subtree의 height) - (right subtree의 height)의 값을 return
+    int GetBalanceFactor(NodeAVL* node);
 };
 
 #endif
