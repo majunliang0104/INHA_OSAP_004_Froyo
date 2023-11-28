@@ -46,6 +46,12 @@ private:
 
     // Set의 root node
     NodeAVL* root_;
+
+    // 해당 node의 height를 재설정
+    void UpdateHeight(NodeAVL* node);
+
+    // start_node부터 root node까지 모든 node의 height 갱신
+    void UpdateHeightUntilRoot(NodeAVL* start_node);
 };
 
 #endif
