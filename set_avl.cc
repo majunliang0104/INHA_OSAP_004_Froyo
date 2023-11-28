@@ -294,6 +294,31 @@ void SetAVL::Restructuring(NodeAVL* new_node)
                             current_node, parent_node, grand_parent_node);
                     }
                 }
+                else
+                {
+                    if (parent_node->GetLeft() == current_node)
+                    {
+                        /*
+                          z
+                           \
+                            y
+                           /
+                          x
+                        */
+                    }
+                    else
+                    {
+                        /*
+                          z
+                           \
+                            y
+                             \
+                              x
+                        */
+                        RestructuringForRightRightCase(
+                            current_node, parent_node, grand_parent_node);
+                    }
+                }
             }
         }
     }
@@ -433,4 +458,67 @@ void SetAVL::RestructuringForLeftRightCase(
 
     // current_node부터 root까지 height 재설정
     UpdateHeightUntilRoot(current_node);
+}
+
+// Right Right Case에 대하여 restructuring 진행
+void SetAVL::RestructuringForRightRightCase(
+    NodeAVL* current_node,
+    NodeAVL* parent_node,
+    NodeAVL* grand_parent_node)
+{
+    /*
+      z
+       \
+        y
+         \
+          x
+    */
+   
+    // grand_parent_node의 부모 노드(grand_grand_parent_node)가 있는지 확인
+    if (grand_parent_node->GetParent() != nullptr)
+    {
+        // grand_parent_node의 부모 노드가 있을 경우
+
+        if (grand_parent_node->GetParent()->GetLeft() == grand_parent_node)
+        {
+            // grand_parent_node가 grand_grand_parent_node의 left child인 경우
+            // grand_grand_parent_node의 left child를 parent_node로 설정
+            grand_parent_node->GetParent()->SetLeft(parent_node);
+        }
+        else
+        {
+            // grand_parent_node가 grand_grand_parent_node의 right child인 경우
+            // grand_grand_parent_node의 right child를 parent_node로 설정
+            grand_parent_node->GetParent()->SetRight(parent_node);
+        }
+    }
+    else
+    {
+        // grand_parent_node는 root 노드
+        // restructuring에 의해 parent_node가 root 노드가 됨
+        root_ = parent_node;
+    }
+
+    NodeAVL* subtree_t2_root = parent_node->GetLeft();
+
+    // current_node의 경우 parent, left, right node 모두 변함 없음
+
+    // parent_node의 parent, left, right node 재설정
+    // parent_node의 right node는 변함 없음
+    parent_node->SetParent(grand_parent_node->GetParent());
+    parent_node->SetLeft(grand_parent_node);
+
+    // grand_parent_node의 parent, left, right node 재설정
+    // grand_parent_node의 left node는 변함 없음
+    grand_parent_node->SetParent(parent_node);
+    grand_parent_node->SetRight(subtree_t2_root);
+
+    // subtree_t2_root의 parent 재설정
+    if (subtree_t2_root != nullptr)
+    {
+        subtree_t2_root->SetParent(grand_parent_node);
+    }
+
+    // grand_parent_node부터 root까지 height 재설정
+    UpdateHeightUntilRoot(grand_parent_node);
 }
