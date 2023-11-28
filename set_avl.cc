@@ -173,3 +173,22 @@ void SetAVL::UpdateHeightUntilRoot(NodeAVL* start_node)
         }
     }
 }
+
+// 해당 node의 (left subtree의 height) - (right subtree의 height)의 값을 return
+int SetAVL::GetBalanceFactor(NodeAVL* node)
+{
+    int left_subtree_height = -1;
+    int right_subtree_height = -1;
+
+    if (node->GetLeft() != nullptr)
+    {
+        left_subtree_height = node->GetLeft()->GetHeight();
+    }
+
+    if (node->GetRight() != nullptr)
+    {
+        right_subtree_height = node->GetRight()->GetHeight();
+    }
+
+    return left_subtree_height - right_subtree_height;
+}
