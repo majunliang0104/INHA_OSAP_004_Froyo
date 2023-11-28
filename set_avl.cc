@@ -74,6 +74,12 @@ void SetAVL::Insert(const int num)
                     // new_node부터 root node까지 모든 node의 height 갱신
                     UpdateHeightUntilRoot(new_node);
 
+                    // new_node부터 root node까지 balance factor를 계산함
+                    // balance factor의 절댓값이 2 이상인 경우 Restructuring을 진행
+                    Restructuring(new_node);
+
+                    // 새로 삽입한 node의 depth 출력
+                    std::cout << getDepth(new_node) << "\n";
                     break;
                 }
                 else
@@ -104,6 +110,12 @@ void SetAVL::Insert(const int num)
                     // new_node부터 root node까지 모든 node의 height 갱신
                     UpdateHeightUntilRoot(new_node);
 
+                    // new_node부터 root node까지 balance factor를 계산함
+                    // balance factor의 절댓값이 2 이상인 경우 Restructuring을 진행
+                    Restructuring(new_node);
+
+                    // 새로 삽입한 node의 depth 출력
+                    std::cout << getDepth(new_node) << "\n";
                     break;
                 }
                 else
@@ -191,4 +203,149 @@ int SetAVL::GetBalanceFactor(NodeAVL* node)
     }
 
     return left_subtree_height - right_subtree_height;
+}
+
+// 해당 node의 depth를 return
+int SetAVL::getDepth(NodeAVL* node)
+{
+    // root node의 depth를 0으로 정의
+    int depth = 0;
+    NodeAVL* current_node = node;
+
+    while (1)
+    {
+        if (current_node == root_)
+        {
+            return depth;
+        }
+        else
+        {
+            current_node = current_node->GetParent();
+            depth++;
+        }
+    }
+}
+
+// new_node부터 root node까지 balance factor를 계산함
+// balance factor의 절댓값이 2 이상인 경우 Restructuring을 진행
+void SetAVL::Restructuring(NodeAVL* new_node)
+{
+    NodeAVL* current_node = new_node;
+    NodeAVL* parent_node = new_node->GetParent();
+    NodeAVL* grand_parent_node = parent_node->GetParent();
+
+    if (grand_parent_node == nullptr)
+    {
+        // grand parent node가 null일 경우 restructuring을 진행할 필요 없음
+        return;
+    }
+    else
+    {
+        while (1)
+        {
+            int balance_factor = GetBalanceFactor(grand_parent_node);
+
+            if (std::abs(balance_factor) <= 1)
+            {
+                // balance_factor의 절댓값이 1 이하인 경우 
+                // restructuring을 진행할 필요 없음
+
+                if (grand_parent_node == root_)
+                {
+                    break;
+                }
+                else
+                {
+                    // current_node, parent_node, grand_parent_node 모두 자신의 부모 노드로 이동
+                    current_node = parent_node;
+                    parent_node = grand_parent_node;
+                    grand_parent_node = grand_parent_node->GetParent();
+                }
+            }
+            else
+            {
+                // balance_factor의 절댓값이 2 이상인 경우 
+                // restructuring이 필요함
+            
+                if (grand_parent_node->GetLeft() == parent_node)
+                {
+                    if (parent_node->GetLeft() == current_node)
+                    {
+                        /*
+                             z
+                            /
+                           y
+                          /
+                         x
+                        */
+                        RestructuringForLeftLeftCase(
+                            current_node, parent_node, grand_parent_node);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Left Left Case에 대하여 restructuring 진행
+void SetAVL::RestructuringForLeftLeftCase(
+    NodeAVL* current_node, 
+    NodeAVL* parent_node,
+    NodeAVL* grand_parent_node) 
+{
+    /*
+         z
+        /
+       y
+      /
+     x
+    */
+    
+    // grand_parent_node의 부모 노드(grand_grand_parent_node)가 있는지 확인
+    if (grand_parent_node->GetParent() != nullptr)
+    {
+        // grand_parent_node의 부모 노드가 있을 경우
+
+        if (grand_parent_node->GetParent()->GetLeft() == grand_parent_node)
+        {
+            // grand_parent_node가 grand_grand_parent_node의 left child인 경우
+            // grand_grand_parent_node의 left child를 parent_node로 설정
+            grand_parent_node->GetParent()->SetLeft(parent_node);
+        }
+        else
+        {
+            // grand_parent_node가 grand_grand_parent_node의 right child인 경우
+            // grand_grand_parent_node의 right child를 parent_node로 설정
+            grand_parent_node->GetParent()->SetRight(parent_node);
+        }
+    }
+    else
+    {
+        // grand_parent_node는 root 노드
+        // restructuring에 의해 parent_node가 root 노드가 됨
+        root_ = parent_node;
+    }
+
+    NodeAVL* subtree_t3_root = parent_node->GetRight();
+
+    // current_node의 경우 parent, left, right node 모두 변함 없음
+
+    // parent_node의 parent, right node 재설정
+    // parent_node의 left node는 변함 없음
+    parent_node->SetRight(grand_parent_node);
+    parent_node->SetParent(grand_parent_node->GetParent());
+
+    // grand_parent_node의 parent, left, right node 재설정
+    // grand_parent_node의 right node는 변함 없음
+    grand_parent_node->SetParent(parent_node);
+    grand_parent_node->SetLeft(subtree_t3_root);
+
+    // subtree_t3_root의 parent 재설정
+    if (subtree_t3_root != nullptr)
+    {
+        subtree_t3_root->SetParent(grand_parent_node);
+    }
+
+    // grand_parent_node부터 root까지 height 재설정
+    UpdateHeightUntilRoot(grand_parent_node);
 }
