@@ -31,7 +31,8 @@ void SetAVL::Maximum(const int key)
     }
     std::cout << "key : " << node->GetNum() << ", depth : " << Find(key);
 }
-
+ 
+ 
 
 // 해당 key를 가지고 있는 node의 depth를 return
 int SetAVL::Find(const int key)
