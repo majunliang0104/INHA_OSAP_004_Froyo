@@ -15,21 +15,21 @@ void SetAVL::Maximum(const int key)
 {
     NodeAVL* node = root_;
     // key를 root로 하는 node찾기
-    while(n != nullptr)
+    while(node != nullptr)
     {
-        if(key == n->GetNum())
+        if(key == node->GetNum())
             break;
-        else if(key < n->GetNum())
-            n = n->GetLeft();
+        else if(key < node->GetNum())
+            node = node->GetLeft();
         else
-            n = n->GetRight();
+            node = node->GetRight();
     }
     // subtree에서 최댓값을 갖는 node찾기
-    while(n != nullptr && n->GetRight() != nullptr)
+    while(node != nullptr && node->GetRight() != nullptr)
     {
-        n = n->GetRight();
+        n = node->GetRight();
     }
-    std::cout << "key : " << n->GetNum() << ", depth : " << Find(key);
+    std::cout << "key : " << node->GetNum() << ", depth : " << Find(key);
 }
 
 
